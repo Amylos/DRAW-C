@@ -1,0 +1,541 @@
+/**
+ * @file app.c
+ * @author your name (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-09-01
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+/**
+ * @file app.c
+ * @author your name (you@domain.com)
+ * @brief
+ * @version 0.1
+ * @date 2022-09-01
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+#include <SDL2/SDL.h>
+
+#include "Container/container.h"
+#include "../Tools/tool.h"
+#include "../Shapes/shape.h"
+#include "app.h"
+
+#define mBitsSet(f,m)       ((f)|=(m))
+#define mBitsClr(f,m)       ((f)&=(~(m)))
+#define mBitsTgl(f,m)       ((f)^=(m))
+#define mBitsMsk(f,m)       ((f)& (m))
+#define mIsBitsSet(f,m)     (((f)&(m))==(m))
+#define mIsBitsClr(f,m)     (((~(f))&(m))==(m))
+
+typedef enum e_status{
+    ST_ALL_CLEARED          = 0x00000000,
+    ST_APP_INIT_FAILED      = 0x80000000,
+    ST_APP_SDL_INITIATED    = 0x40000000,
+    ST_APP_IS_DRAWING       = 0x00000001,
+    ST_APP_LCTRL_PRESSED    = 0x00000002,
+	ST_APP_LSHIFT_PRESSED   = 0x00000004,
+}t_status;
+
+	struct s_app {
+		t_status        m_uStatus;				/* application status flags							*/
+		SDL_Rect        m_rWindowFrame;			/* application main window frame					*/
+		SDL_Color       m_colorBkgnd;			/* application main window background color			*/
+		char*           m_pTitle;				/* application main window title					*/
+
+		SDL_Window*     m_pWindow;				/* application main window structure pointer		*/
+		SDL_Renderer*   m_pRenderer;			/* application main renderer structure pointer		*/
+		SDL_TimerID     m_iTimerID;				/* application main timer ID						*/
+
+		SDL_Rect        m_rDrawingArea;			/* application drawing frame area 					*/
+		SDL_Rect        m_rToolboxArea;			/* application tool-box frame area					*/
+
+		t_container*    m_pToolbox;				/* application tool-box container pointer			*/
+		t_tool*         m_pSelectedTool;			/* application selected tool pointer				*/
+		SDL_Color       m_selectedToolColor;	/* application selected tool color					*/
+
+		SDL_Point       m_ptStart,				/* points structures for drawing mechanism purpose	*/
+						m_ptEnd;
+
+		SDL_Point*      m_pVertexes;			/* dynamic points array for drawing free polygons	*/
+		int             m_iVertexesNumber;		/* current or total number of polygon vertexes		*/
+		int             m_iVertexesCapacity;	/* current size of the dynamic vertexes array		*/
+
+		t_container*    m_pShapes;				/* the drawn shapes container pointer				*/
+		t_shape*		m_ShapeOnMouse;
+	};
+
+Uint32 _AppTimerCallback(Uint32 interval, void*pParam){
+    (void)pParam;
+    SDL_Event event={.type=SDL_USEREVENT,};
+    SDL_PushEvent(&event);
+    return interval;
+}
+
+t_app*_AppDraw(t_app*pApp);
+
+
+t_app*AppNew(int iWidth, int iHeight, int iColorBkgnd, const char*pAppTitleStr){
+    t_app*pApp=(t_app*)malloc(sizeof(t_app));
+    assert(pApp);
+    *pApp=(t_app){
+        .m_uStatus      = ST_ALL_CLEARED,
+        .m_rWindowFrame = (SDL_Rect){0, 0, iWidth, iHeight},
+        .m_rDrawingArea = (SDL_Rect){APP_TOOLBOX_WIDTH, 0, iWidth-APP_TOOLBOX_WIDTH, iHeight},
+        .m_rToolboxArea = (SDL_Rect){0, 0, APP_TOOLBOX_WIDTH, iHeight},
+        .m_colorBkgnd   = *(SDL_Color*)&iColorBkgnd,
+        .m_pTitle       = (char*)malloc(strlen(pAppTitleStr)+1),
+
+        .m_pToolbox = ContainerNew((t_ptfV)ToolDel),
+
+        .m_pShapes = ContainerNew((t_ptfV)ShapeDel),
+
+        .m_selectedToolColor = (SDL_Color){255,0,0,255},
+    };
+    strcpy(pApp->m_pTitle, pAppTitleStr);
+
+    if(SDL_Init(SDL_INIT_VIDEO)!=0){
+        mBitsSet(pApp->m_uStatus, ST_APP_INIT_FAILED);
+        return pApp;
+    }
+    mBitsSet(pApp->m_uStatus, ST_APP_SDL_INITIATED);
+
+    if((pApp->m_pWindow=SDL_CreateWindow(
+                            pAppTitleStr,
+                            SDL_WINDOWPOS_UNDEFINED,
+                            SDL_WINDOWPOS_UNDEFINED,
+                            iWidth,
+                            iHeight,
+                            SDL_WINDOW_SHOWN))==NULL){
+	SDL_Log("Failed to create window: %s\n", SDL_GetError());
+	mBitsSet(pApp->m_uStatus, ST_APP_INIT_FAILED);
+	return pApp;
+    }
+
+    if((pApp->m_pRenderer=SDL_CreateRenderer(pApp->m_pWindow, -1, SDL_RENDERER_ACCELERATED))==NULL){
+    	SDL_Log("Failed to create accelerated renderer: %s\n", SDL_GetError());
+        if((pApp->m_pRenderer=SDL_CreateRenderer(pApp->m_pWindow, -1, SDL_RENDERER_SOFTWARE))==NULL){
+           SDL_Log("Failed to create software renderer: %s\n", SDL_GetError());
+            mBitsSet(pApp->m_uStatus, ST_APP_INIT_FAILED);
+            return pApp;
+        }    
+        SDL_Log("Created software renderer instead!\n");
+    }
+
+    pApp->m_iTimerID=SDL_AddTimer(APP_TIMER_INTERVAL, _AppTimerCallback, NULL);
+
+    /**************************************************************************************************************************************************
+     * @todo:   Populating here the tool-box with the different tools by pushing new tool
+     *          in the tool-box container.
+     * 
+     * @example: ContainerPushback(pApp->m_pToolbox, ToolNew(TOOL_SQUARE, APP_TOOLBOX_TOOL_SIZE, APP_TOOLBOX_TOOL_SPACING, APP_TOOLBOX_TOOL_SPACING));
+     *  
+     */
+    ContainerPushback(pApp->m_pToolbox,
+    		ToolNew(TOOL_SQUARE,
+    		APP_TOOLBOX_TOOL_SIZE,
+			APP_TOOLBOX_TOOL_SPACING,
+			APP_TOOLBOX_TOOL_SPACING));
+
+    ContainerPushback(pApp->m_pToolbox,
+        		ToolNew(TOOL_TRIANGLE,
+        		APP_TOOLBOX_TOOL_SIZE,
+    			APP_TOOLBOX_TOOL_SPACING,
+    			APP_TOOLBOX_TOOL_SPACING*2 + APP_TOOLBOX_TOOL_SIZE));
+
+    ContainerPushback(pApp->m_pToolbox,
+					ToolNew(TOOL_CIRCLE,
+					APP_TOOLBOX_TOOL_SIZE,
+					APP_TOOLBOX_TOOL_SPACING,
+					APP_TOOLBOX_TOOL_SPACING*3 + APP_TOOLBOX_TOOL_SIZE*2));
+
+    ContainerPushback(pApp->m_pToolbox,
+            		ToolNew(TOOL_POLYGON,
+            		APP_TOOLBOX_TOOL_SIZE,
+        			APP_TOOLBOX_TOOL_SPACING,
+        			APP_TOOLBOX_TOOL_SPACING*4 + APP_TOOLBOX_TOOL_SIZE*3));
+
+    ContainerPushback(pApp->m_pToolbox,
+               		ToolNew(TOOL_COLORCHART,
+               		APP_TOOLBOX_TOOL_SIZE,
+           			APP_TOOLBOX_TOOL_SPACING,
+           			APP_TOOLBOX_TOOL_SPACING*5 + APP_TOOLBOX_TOOL_SIZE*4,
+					pApp->m_pRenderer,
+					APP_TOOLBOX_COLORCHART_FILE));
+
+    return pApp;
+}
+
+t_app*AppDel(t_app*pApp){
+    assert(pApp);
+    if(pApp->m_iTimerID)    SDL_RemoveTimer(pApp->m_iTimerID);
+
+    if(pApp->m_pShapes)     ContainerDel(pApp->m_pShapes);
+
+    if(pApp->m_pToolbox)    ContainerDel(pApp->m_pToolbox);
+
+    if(pApp->m_pTitle)      free(pApp->m_pTitle);
+    if(pApp->m_pRenderer)   SDL_DestroyRenderer(pApp->m_pRenderer);
+    if(pApp->m_pWindow)     SDL_DestroyWindow(pApp->m_pWindow);
+
+    if(mIsBitsSet(pApp->m_uStatus, ST_APP_SDL_INITIATED))   {
+        /* SDL_Quit(); */   /* set  in comment to avoid fake sanitize memory leaks */
+    }
+
+    free(pApp);
+    return NULL;
+}
+
+/* Tool strings equivalent for displaying conveniences, offsets-enumerate values corresponding  */
+const char*toolTypeStrs[]={
+    "UNDEFINED",    /* @offset 0*/
+    "CIRCLE",       /* @offset 1*/
+    "", /* NOT USED */
+    "", /* NOT USED */
+    "TRIANGLE",     /* @offset 4*/
+    "SQUARE",       /* @offset 5*/
+    "", /* NOT USED */
+    "POLYGON",      /* @offset 7*/
+    "COLORCHART"    /* @offset 8*/
+};
+
+int   AppRun(t_app*pApp){
+    assert(pApp);
+    if(mIsBitsSet(pApp->m_uStatus, ST_APP_INIT_FAILED)) return EXIT_FAILURE;
+
+    int iQuit=0;
+    SDL_Event event;
+    char buf[256];
+
+    while(!iQuit){
+        if(SDL_WaitEvent(&event)){
+            switch(event.type){
+            case SDL_USEREVENT:
+                _AppDraw(pApp);
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                if(SDL_PointInRect(&(SDL_Point){event.button.x, event.button.y}, &pApp->m_rToolboxArea)){
+                    /* Mouse clicked in the tool-box area, get the selected tool if any --------------------------------------------------------------*/
+                	t_tool*pCurrentTool = pApp->m_pSelectedTool;
+                    if((pApp->m_pSelectedTool=(t_tool*)ContainerParse(pApp->m_pToolbox, (t_ptfVV)ToolAt, &(SDL_Point){event.motion.x, event.motion.y}))){
+                        sprintf(buf,"Tool#%d: %s", ToolGetType(pApp->m_pSelectedTool), toolTypeStrs[ToolGetType(pApp->m_pSelectedTool)]);
+                        SDL_SetWindowTitle(pApp->m_pWindow, buf);   /* for convenience, tool type and tool name are printed in window title */
+
+                        if(ToolGetType(pApp->m_pSelectedTool) == TOOL_COLORCHART){
+                        	pApp->m_selectedToolColor = ToolGetColor(pApp->m_pSelectedTool);
+                        	pApp->m_pSelectedTool = pCurrentTool;
+                        }
+                    }
+                    else{
+                        SDL_SetWindowTitle(pApp->m_pWindow, pApp->m_pTitle); /* no tool selected, displaying the default window title */
+                    }
+                }
+                else{
+                    /* Mouse clicked in the drawing area, start or resume shape drawing mechanism-----------------------------------------------------*/
+                    if(pApp->m_pSelectedTool){ /* only if we have a selected tool... */
+                        pApp->m_ptStart = pApp->m_ptEnd = (SDL_Point){event.button.x, event.button.y};
+#ifdef APP_USE_SDLSETWINDOWMOUSERECT
+                        SDL_SetWindowMouseRect(pApp->m_pWindow, &pApp->m_rDrawingArea); /* clip the mouse cursor to the drawing area */
+#endif
+                        if(ToolGetType(pApp->m_pSelectedTool)==TOOL_POLYGON){ /* if tool is the polygon tool, we should process it differently...*/
+#ifndef APP_DONT_PROCESS_POLYGON_TOOL
+                            if(mIsBitsClr(pApp->m_uStatus, ST_APP_IS_DRAWING)){ /* if we start a new polygon drawing...*/
+                                pApp->m_iVertexesNumber=0;
+                                /**
+                                 * @todo: allocate a first dynamic vertexes array with a fixed default capacity
+                                 * 
+                                 */
+                                pApp->m_iVertexesCapacity =10;
+                                pApp->m_pVertexes = (SDL_Point*)malloc(sizeof(SDL_Point)*pApp->m_iVertexesCapacity);
+                                assert(pApp->m_pVertexes);
+
+                            }
+
+                            pApp->m_pVertexes[pApp->m_iVertexesNumber]=pApp->m_ptStart; /* store the current cursor point as a new polygon vertex */
+                            /**
+                             * @todo: update the vertexes number of the drawing polygon
+                             *        take care of the dynamic vertexes array capacity for next vertexes
+                             *        if necessary, grows this array by re-allocate a new greater one (the array capacity must be updated)
+                             */
+
+                            if(++pApp->m_iVertexesNumber>=pApp->m_iVertexesCapacity){
+                            	pApp->m_iVertexesCapacity*=1.5;
+                            	pApp->m_pVertexes = (SDL_Point*)realloc(pApp->m_pVertexes,sizeof(SDL_Point)*pApp->m_iVertexesCapacity);
+                            	assert(pApp->m_pVertexes);
+                            }
+#endif
+                        }
+                        mBitsSet(pApp->m_uStatus, ST_APP_IS_DRAWING);   /* marking that we have started a new drawing */
+                    }
+                }
+                break;
+            case SDL_MOUSEBUTTONUP:
+                if(SDL_PointInRect(&(SDL_Point){event.button.x, event.button.y}, &pApp->m_rToolboxArea)) break; /* 'trying to keep control on elements' LOL! */
+                if(pApp->m_pSelectedTool){ /* if we got a selected tool... */
+                    pApp->m_ptEnd=(SDL_Point){event.button.x, event.button.y};  /* take trace of the mouse cursor point */
+                    switch (ToolGetType(pApp->m_pSelectedTool)){
+                    case TOOL_TRIANGLE:
+                    case TOOL_SQUARE:
+                    case TOOL_CIRCLE:
+                        /**
+                         * @todo: for this tools, process are the same: pushing a new Shape in the shapes container
+                         *        extract asked parameters by ShapeNew() from the application data
+                         * 
+                         *      i.e.  ContainerPushback(pApp->m_pShapes, ShapeNew(...));
+                         */
+
+                    	ContainerPushback(pApp->m_pShapes, ShapeNew(ToolGetType(pApp->m_pSelectedTool),
+                    			pApp->m_ptStart.x,
+                    			pApp->m_ptStart.y,
+                    			SDL_abs(pApp->m_ptStart.x-pApp->m_ptEnd.x), SDL_abs(pApp->m_ptStart.y-pApp->m_ptEnd.y),
+								pApp->m_selectedToolColor));
+
+#ifdef APP_USE_SDLSETWINDOWMOUSERECT
+                        SDL_SetWindowMouseRect(pApp->m_pWindow, NULL);  /* we have finished the shape drawing, we can release the mouse cursor clipping */
+#endif
+                        mBitsClr(pApp->m_uStatus, ST_APP_IS_DRAWING);   /* marking that we have finished the drawing */
+                        break;
+                    case TOOL_POLYGON:
+                        if(mIsBitsSet(pApp->m_uStatus, ST_APP_LCTRL_PRESSED)){ /* this is the way to end a polygon drawing, Left CTRL key must be pressed */
+#ifndef APP_DONT_PROCESS_POLYGON_TOOL
+                            pApp->m_pVertexes[pApp->m_iVertexesNumber]=pApp->m_ptEnd;
+                            pApp->m_iVertexesNumber++;
+                            /**
+                             * @todo: pushing a new polygon shape in the shapes container
+                             *        extract asked parameters by ShapeNew() from the application data
+                             */
+
+                        	ContainerPushback(pApp->m_pShapes, ShapeNew(SHAPE_POLYGON,0,0,0,0,
+									pApp->m_selectedToolColor,
+									pApp->m_iVertexesNumber,pApp->m_pVertexes));
+
+                            /**
+                             * @todo: releasing the dynamic vertexes array
+                             * 
+                             */
+                        	free(pApp->m_pVertexes);
+#endif
+#ifdef APP_USE_SDLSETWINDOWMOUSERECT
+                            SDL_SetWindowMouseRect(pApp->m_pWindow, NULL);  /* we have finished the shape drawing, we can release the mouse cursor clipping */
+#endif
+                            mBitsClr(pApp->m_uStatus, ST_APP_IS_DRAWING);   /* marking that we have finished the drawing */
+                        }
+                        break;
+                    case TOOL_COLORCHART:
+                        /* there is nothing special to do with the color-char tool, only closing 'the drawing session' */
+#ifdef APP_USE_SDLSETWINDOWMOUSERECT
+                        SDL_SetWindowMouseRect(pApp->m_pWindow, NULL);
+#endif
+                        mBitsClr(pApp->m_uStatus, ST_APP_IS_DRAWING);
+                        break;
+                    default:
+                        break;
+                    }
+                }
+                break;
+            case SDL_MOUSEMOTION:
+                if(mIsBitsSet(pApp->m_uStatus, ST_APP_IS_DRAWING)){ /* if we are drawing some shape, then take care of tracing the mouse cursor location */
+                    pApp->m_ptEnd=(SDL_Point){event.motion.x, event.motion.y};
+#ifndef APP_USE_SDLSETWINDOWMOUSERECT
+                    {
+                    	int iXmouse=event.motion.x, iYmouse=event.motion.y, iClip=0;
+						if(event.motion.x<pApp->m_rDrawingArea.x){
+							iXmouse=pApp->m_rDrawingArea.x;
+							iClip=1;
+						}
+						if(event.motion.x>pApp->m_rDrawingArea.x+pApp->m_rDrawingArea.w){
+							iXmouse=pApp->m_rDrawingArea.x+pApp->m_rDrawingArea.w;
+							iClip=1;
+						}
+						if(event.motion.y<pApp->m_rDrawingArea.y){
+							iYmouse=pApp->m_rDrawingArea.y;
+							iClip=1;
+						}
+						if(event.motion.y>pApp->m_rDrawingArea.y+pApp->m_rDrawingArea.h){
+							iYmouse=pApp->m_rDrawingArea.y+pApp->m_rDrawingArea.h;
+							iClip=1;
+						}
+						if(iClip) SDL_WarpMouseInWindow(pApp->m_pWindow, iXmouse, iYmouse);
+                    }
+#endif
+                }
+                else{	/* WE ARE NOT DRAWING AT THIS TIME !!!!!!!!!!!!!!!!!!!! */
+                	if(mIsBitsSet(pApp->m_uStatus,ST_APP_LSHIFT_PRESSED)){
+                		if(pApp->m_ShapeOnMouse){
+                			ShapeDrag(pApp->m_ShapeOnMouse, event.motion.xrel, event.motion.yrel);
+                		}
+                		else{
+                			pApp->m_ShapeOnMouse = (t_shape*)ContainerParse(pApp->m_pShapes, (t_ptfVV)ShapeIsAt,&(SDL_Point){event.motion.x,event.motion.y} );
+                		}
+                	}
+                }
+
+                break;
+            case SDL_QUIT:
+                iQuit=1;
+                break;
+            case SDL_KEYDOWN:
+                switch(event.key.keysym.sym){
+                case SDLK_LSHIFT:
+                	mBitsSet(pApp->m_uStatus,ST_APP_LSHIFT_PRESSED);
+                	break;
+                case SDLK_s: /******* SERIALIZE ********/
+				   { FILE*fd = fopen("Shape.save", "wb");
+					if(fd == NULL){
+						SDL_Log ("Failed to open file : %s", strerror(errno));
+					}
+					else{
+						size_t nCard = ContainerCard(pApp->m_pShapes);
+						fwrite(&nCard, sizeof nCard, 1,fd);
+						ContainerParse(pApp->m_pShapes,(t_ptfVV)ShapeSerialize,(void*)fd);
+						fclose(fd);
+					}
+				   }
+					break;
+                case SDLK_l: /* UN SERIALIZE FILE TO CONTAINER */
+                {	FILE*fd = fopen("Shape.save", "rb");
+					if(fd == NULL){
+						SDL_Log ("Failed to open file : %s", strerror(errno));
+                	}
+					else{
+						ContainerFlush(pApp->m_pShapes);
+						size_t nCard;
+						fread(&nCard, sizeof nCard,1,fd);
+						while(nCard){
+							ContainerPushback(pApp->m_pShapes, ShapeNewFromFile(fd));
+							nCard--;
+						}
+					}
+                }
+                	break;
+
+                case SDLK_f:
+                	ContainerFlush(pApp->m_pShapes);
+                	break;
+                case SDLK_LCTRL:
+                    mBitsSet(pApp->m_uStatus, ST_APP_LCTRL_PRESSED);
+                    break;
+                case SDLK_ESCAPE:
+                    if(mIsBitsSet(pApp->m_uStatus, ST_APP_IS_DRAWING)){
+                        /**
+                         * @todo: some actions for aborting the current drawing session
+                         * 
+                         */
+
+                    }
+                    else{
+                        event.type=SDL_QUIT;
+                        SDL_PushEvent(&event);
+                    }
+                    break;
+                default:
+                    break;
+                }
+                break;
+            case SDL_KEYUP:
+                switch(event.key.keysym.sym){
+                case SDLK_LSHIFT:
+					mBitsClr(pApp->m_uStatus,ST_APP_LSHIFT_PRESSED);
+					pApp->m_ShapeOnMouse = NULL;
+					break;
+                case SDLK_LCTRL:
+                    mBitsClr(pApp->m_uStatus, ST_APP_LCTRL_PRESSED);
+                    break;
+                default:
+                    break;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
+    return EXIT_SUCCESS;
+}
+
+t_app*_AppDraw(t_app*pApp){
+
+    /* Clearing the window background----------------------------------------------------------------------------*/
+    SDL_SetRenderDrawColor(
+        pApp->m_pRenderer,
+        pApp->m_colorBkgnd.r,
+        pApp->m_colorBkgnd.g,
+        pApp->m_colorBkgnd.b,
+        pApp->m_colorBkgnd.a);
+    SDL_RenderClear(pApp->m_pRenderer);
+
+    ContainerParse(pApp->m_pShapes, (t_ptfVV)ShapeDraw, pApp->m_pRenderer);
+
+    SDL_SetRenderDrawColor(
+		pApp->m_pRenderer,
+		pApp->m_colorBkgnd.r,
+		pApp->m_colorBkgnd.g,
+		pApp->m_colorBkgnd.b,
+		pApp->m_colorBkgnd.a);
+
+    SDL_RenderFillRect(pApp->m_pRenderer, &pApp->m_rToolboxArea);
+
+    /* Drawing the tool box ------------------------------------------------------------------------------------*/
+    SDL_SetRenderDrawColor(
+        pApp->m_pRenderer,
+        pApp->m_colorBkgnd.r + 100,
+        pApp->m_colorBkgnd.g + 100,
+        pApp->m_colorBkgnd.b + 100,
+        pApp->m_colorBkgnd.a);
+
+    SDL_RenderDrawLine(pApp->m_pRenderer, APP_TOOLBOX_WIDTH, 0, APP_TOOLBOX_WIDTH, pApp->m_rWindowFrame.h);
+
+    /* Drawing the tools in the tool-box -----------------------------------------------------------------------*/
+    ContainerParse(pApp->m_pToolbox, (t_ptfVV)ToolDraw, pApp->m_pRenderer);
+
+    /* Drawing the 'drawn shapes' ------------------------------------------------------------------------------*/
+
+
+    /* Drawing the 'drawing action' ----------------------------------------------------------------------------*/
+    if(mIsBitsSet(pApp->m_uStatus, ST_APP_IS_DRAWING)){
+        if(ToolGetType(pApp->m_pSelectedTool)==TOOL_POLYGON){    /* drawing polygons need a different processing */
+#ifndef APP_DONT_PROCESS_POLYGON_TOOL
+        	SDL_SetRenderDrawColor( /* for testing purpose, the drawing action for polygons is made with a different color */
+                pApp->m_pRenderer,
+                0,
+                200,
+                0,
+                255); 
+            SDL_RenderDrawLines(pApp->m_pRenderer, pApp->m_pVertexes, pApp->m_iVertexesNumber);
+            SDL_RenderDrawLine(
+                pApp->m_pRenderer,
+                pApp->m_pVertexes[pApp->m_iVertexesNumber-1].x, pApp->m_pVertexes[pApp->m_iVertexesNumber-1].y,
+                pApp->m_ptEnd.x, pApp->m_ptEnd.y);
+#endif
+        }
+        else{
+            SDL_SetRenderDrawColor(
+                pApp->m_pRenderer,
+                pApp->m_colorBkgnd.r + 100,
+                pApp->m_colorBkgnd.g + 100,
+                pApp->m_colorBkgnd.b + 100,
+                pApp->m_colorBkgnd.a); 
+            SDL_RenderDrawRect(
+                pApp->m_pRenderer, 
+                &(SDL_Rect){
+                    pApp->m_ptStart.x,
+                    pApp->m_ptStart.y,
+                    pApp->m_ptEnd.x-pApp->m_ptStart.x, 
+                    pApp->m_ptEnd.y-pApp->m_ptStart.y});
+        }
+    }
+
+    /* Presenting the entire renderer to the screen ---------------------------------------------------------------*/
+    SDL_RenderPresent(pApp->m_pRenderer);
+    return pApp;
+}

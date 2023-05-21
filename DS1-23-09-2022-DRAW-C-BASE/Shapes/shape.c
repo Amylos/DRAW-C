@@ -1,0 +1,233 @@
+/**
+ * @file shape.c
+ * @author your name (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-09-21
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <stdarg.h>
+#include <SDL2/SDL.h>
+#include "../Utils/utils.h"
+#include "shape.h"
+
+struct s_shape {
+    t_shapeType     m_type;			/* enumerate shape type, identifying the specific shape  */
+    SDL_Rect        m_rFrame;		/* shape rectangular frame, enclosing the entire shape	 */
+    SDL_Color       m_color;		/* shape drawing RGBA color  							 */
+    SDL_Point*      m_pVextexes;	/* shape vertexes dynamic array: use only with free
+                                        polygon shapes 										 */
+    int             m_iVertexes;	/* shape number of vertexes: use only with free polygons */
+};
+
+t_shape*ShapeNew(t_shapeType shapeType, int iLocX, int iLocY, int iWidth, int iHeight, SDL_Color color, ...){
+    t_shape*pShape=(t_shape*)malloc(sizeof(t_shape));
+    assert(pShape);
+    
+    /**
+     * @todo: initializing the new pShape structure with parameters
+     *
+     */
+
+    *pShape = (t_shape){
+    	.m_type = shapeType,
+    	.m_rFrame = (SDL_Rect){iLocX,iLocY,iWidth,iHeight},
+		.m_color = color,
+    };
+
+
+    if(pShape->m_type == SHAPE_CIRCLE){
+    	if(iWidth <0) pShape->m_rFrame.w*=-1;
+    	if(iWidth <0) pShape->m_rFrame.h*=-1;
+    }
+
+
+    if(shapeType==SHAPE_POLYGON){
+    	/* only for use of SHAPE_POLYGON: DO NOT MODIFY */
+        va_list optList;
+        va_start(optList, color);
+
+        pShape->m_iVertexes = va_arg(optList, int);
+        assert(pShape->m_iVertexes);
+
+
+        /******************************************************/
+        /* un-comment the line below when using SHAPE_POLYGON */
+        SDL_Point*pVertexes=va_arg(optList, SDL_Point*);
+
+
+        /************************************************/
+
+        /**
+         * @todo: allocating the dynamic polygon vertexes array
+         *
+         */
+
+        pShape->m_pVextexes = (SDL_Point*)malloc(sizeof(SDL_Point)*(pShape->m_iVertexes+1));
+        assert(pShape->m_pVextexes);
+
+
+        int k,
+			iXmin = pShape->m_pVextexes[0].x,
+			iXmax = pShape->m_pVextexes[0].x,
+			iYmin = pShape->m_pVextexes[0].y,
+			iYmax = pShape->m_pVextexes[0].y;
+
+        /**
+         * @todo: initializing the polygon vertexes with the vertexes parameter
+         *
+         */
+
+        for(k=0 ; k < pShape->m_iVertexes;k++){
+        	pShape->m_pVextexes[k] = pVertexes[k];
+        	if(iXmin > pShape->m_pVextexes[k].x)	iXmin = pShape->m_pVextexes[k].x;
+			if(iXmax < pShape->m_pVextexes[k].x)	iXmax = pShape->m_pVextexes[k].x;
+			if(iYmin > pShape->m_pVextexes[k].y)	iYmin = pShape->m_pVextexes[k].y;
+			if(iYmax < pShape->m_pVextexes[k].y)	iYmax = pShape->m_pVextexes[k].y;
+        }
+        pShape->m_pVextexes[k] = pVertexes[0];
+        pShape->m_rFrame = (SDL_Rect){iXmin,iYmin,iXmax - iXmin,iYmax - iYmin};
+        SDL_Log("%d %d %d %d", pShape->m_rFrame.x, pShape->m_rFrame.y, pShape->m_rFrame.w, pShape->m_rFrame.h);
+
+        /* only for use of SHAPE_POLYGON: DO NOT MODIFY */
+        va_end(optList);
+        /************************************************/
+    }
+    return pShape;
+}
+
+t_shape*ShapeDel(t_shape*pShape){
+    assert(pShape);
+    if(pShape->m_pVextexes) free(pShape->m_pVextexes);
+    free(pShape);
+    return NULL;
+}
+
+t_shape*ShapeDraw(t_shape*pShape, SDL_Renderer*pRenderer){
+    assert(pShape);
+    SDL_SetRenderDrawColor(
+        pRenderer,
+        pShape->m_color.r,
+        pShape->m_color.g,
+        pShape->m_color.b,
+        pShape->m_color.a);
+    switch (pShape->m_type) {
+    case SHAPE_SQUARE:
+        SDL_RenderDrawRect(pRenderer, &pShape->m_rFrame);
+        break;
+    case SHAPE_TRIANGLE:
+        SDL_RenderDrawLine(
+                    pRenderer,
+                    pShape->m_rFrame.x,                         pShape->m_rFrame.y+pShape->m_rFrame.h,
+                    pShape->m_rFrame.x+pShape->m_rFrame.w/2,    pShape->m_rFrame.y);
+        SDL_RenderDrawLine(
+                    pRenderer,
+                    pShape->m_rFrame.x+pShape->m_rFrame.w/2,    pShape->m_rFrame.y,
+                    pShape->m_rFrame.x+pShape->m_rFrame.w,      pShape->m_rFrame.y+pShape->m_rFrame.h);
+        SDL_RenderDrawLine(
+                    pRenderer,
+                    pShape->m_rFrame.x+pShape->m_rFrame.w,      pShape->m_rFrame.y+pShape->m_rFrame.h,
+                    pShape->m_rFrame.x,                         pShape->m_rFrame.y+pShape->m_rFrame.h);
+        break;
+    case SHAPE_CIRCLE:
+        SDL_RenderDrawCircle(
+                    pRenderer,
+                    pShape->m_rFrame.x+pShape->m_rFrame.w/2,
+                    pShape->m_rFrame.y+pShape->m_rFrame.w/2,
+                    pShape->m_rFrame.w/2);
+        break;
+    case SHAPE_POLYGON:
+        SDL_RenderDrawLines(pRenderer, pShape->m_pVextexes, pShape->m_iVertexes+1);
+        break;
+    case SHAPE_UNDEFINED:    
+    default:
+        break;
+    }
+    return NULL;
+}
+
+t_shape*ShapeDrag(t_shape*pShape, int iDx, int iDy){
+    assert(pShape);
+    /**
+     * @todo
+     * 
+     */
+
+    pShape->m_rFrame.x += iDx;
+    pShape->m_rFrame.y += iDy;
+
+      if(pShape->m_type ==SHAPE_POLYGON){
+      	for(int k =0;k<=pShape->m_iVertexes;k++){
+      		printf("LAMOUCHE");
+      		pShape->m_pVextexes[k].x += iDx;
+      		pShape->m_pVextexes[k].y += iDy;
+      	}
+      }
+
+    return NULL;
+}
+
+t_shape*ShapeIsAt(t_shape*pShape, SDL_Point*piAt){
+	assert(pShape);
+	assert(piAt);
+
+	 if((t_shape*)SDL_PointInRect(piAt, &pShape->m_rFrame)){
+		 printf("LAMOUCHE\n");
+		 return pShape;
+	 }
+	 else{
+		 return NULL;
+	 }
+}
+
+
+
+
+
+
+
+
+
+t_shape*ShapeSerialize(t_shape*pShape,FILE*fd){
+	assert(pShape);
+	assert(fd);
+
+	fwrite(&pShape->m_color,sizeof(SDL_Color),1,fd);
+	fwrite(&pShape->m_iVertexes,sizeof(int),1,fd);
+	for(int k = 0; k<pShape->m_iVertexes;++k){
+		fwrite(&pShape->m_pVextexes[k],sizeof pShape->m_pVextexes[0],1,fd);
+	}
+	fwrite(&pShape->m_rFrame,sizeof(SDL_Rect),1,fd);
+	fwrite(&pShape->m_type,sizeof(t_shapeType),1,fd);
+	printf("LAMOUCHE SERIALIZE");
+	return NULL;
+}
+
+t_shape*ShapeNewFromFile(FILE*fd){
+	assert(fd);
+	t_shape*pShape = (t_shape*)malloc(sizeof(t_shape));
+	assert(pShape);
+
+	fread(&pShape->m_color,sizeof(SDL_Color),1,fd);
+	fread(&pShape->m_iVertexes,sizeof(int),1,fd);
+
+	pShape->m_pVextexes = (SDL_Point*)malloc(sizeof(SDL_Point)*pShape->m_iVertexes);
+	int k;
+
+	for(k = 0; k <pShape->m_iVertexes;++k){
+		fread(&pShape->m_pVextexes[k], sizeof pShape->m_pVextexes[0],1,fd);
+	}
+	pShape->m_pVextexes[k] = pShape->m_pVextexes[0];
+
+
+	fread(&pShape->m_rFrame,sizeof(SDL_Rect),1,fd);
+	fread(&pShape->m_type,sizeof(t_shapeType),1,fd);
+	printf("LAMOUCHE NOUVELLE");
+	return pShape;
+}

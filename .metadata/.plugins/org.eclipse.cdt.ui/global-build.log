@@ -1,0 +1,490 @@
+18:53:04 **** Rebuild of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\Container\\container.o" "..\\App\\Container\\container.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Utils\\utils.o" "..\\Utils\\utils.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\main.o" "..\\src\\main.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+18:55:54 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\main.o" "..\\src\\main.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+18:57:56 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+18:58:03 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+..\App\app.c: In function 'AppRun':
+..\App\app.c:372:94: error: 'ShapeIsAt' undeclared (first use in this function)
+                    pApp->m_ShapeOnMouse = (t_shape*)ContainerParse(pApp->m_pShapes, (t_ptfVV)ShapeIsAt,&(SDL_Point){event.motion.x,event.motion.y} );
+                                                                                              ^~~~~~~~~
+..\App\app.c:372:94: note: each undeclared identifier is reported only once for each function it appears in
+..\App\app.c:394:47: error: 'ShapeSerialize' undeclared (first use in this function)
+       ContainerParse(pApp->m_pShapes,(t_ptfVV)ShapeSerialize,(void*)fd);
+                                               ^~~~~~~~~~~~~~
+..\App\app.c:409:43: warning: implicit declaration of function 'ShapeNewFromFile' [-Wimplicit-function-declaration]
+        ContainerPushback(pApp->m_pShapes, ShapeNewFromFile(fd));
+                                           ^~~~~~~~~~~~~~~~
+..\App\app.c:409:43: warning: passing argument 2 of 'ContainerPushback' makes pointer from integer without a cast [-Wint-conversion]
+In file included from ..\App\app.c:28:0:
+..\App\Container/container.h:21:6: note: expected 'void *' but argument is of type 'int'
+ void*ContainerPushback(t_container*pContainer, void*pItem);
+      ^~~~~~~~~~~~~~~~~
+18:58:12 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+..\App\app.c: In function 'AppRun':
+..\App\app.c:372:94: error: 'ShapeIsAt' undeclared (first use in this function)
+                    pApp->m_ShapeOnMouse = (t_shape*)ContainerParse(pApp->m_pShapes, (t_ptfVV)ShapeIsAt,&(SDL_Point){event.motion.x,event.motion.y} );
+                                                                                              ^~~~~~~~~
+..\App\app.c:372:94: note: each undeclared identifier is reported only once for each function it appears in
+..\App\app.c:394:47: error: 'ShapeSerialize' undeclared (first use in this function)
+       ContainerParse(pApp->m_pShapes,(t_ptfVV)ShapeSerialize,(void*)fd);
+                                               ^~~~~~~~~~~~~~
+..\App\app.c:409:43: warning: implicit declaration of function 'ShapeNewFromFile' [-Wimplicit-function-declaration]
+        ContainerPushback(pApp->m_pShapes, ShapeNewFromFile(fd));
+                                           ^~~~~~~~~~~~~~~~
+..\App\app.c:409:43: warning: passing argument 2 of 'ContainerPushback' makes pointer from integer without a cast [-Wint-conversion]
+In file included from ..\App\app.c:28:0:
+..\App\Container/container.h:21:6: note: expected 'void *' but argument is of type 'int'
+ void*ContainerPushback(t_container*pContainer, void*pItem);
+      ^~~~~~~~~~~~~~~~~
+18:58:50 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+..\App\app.c: In function 'AppRun':
+..\App\app.c:372:94: error: 'ShapeIsAt' undeclared (first use in this function)
+                    pApp->m_ShapeOnMouse = (t_shape*)ContainerParse(pApp->m_pShapes, (t_ptfVV)ShapeIsAt,&(SDL_Point){event.motion.x,event.motion.y} );
+                                                                                              ^~~~~~~~~
+..\App\app.c:372:94: note: each undeclared identifier is reported only once for each function it appears in
+18:58:52 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+..\App\app.c: In function 'AppRun':
+..\App\app.c:372:94: error: 'ShapeIsAt' undeclared (first use in this function)
+                    pApp->m_ShapeOnMouse = (t_shape*)ContainerParse(pApp->m_pShapes, (t_ptfVV)ShapeIsAt,&(SDL_Point){event.motion.x,event.motion.y} );
+                                                                                              ^~~~~~~~~
+..\App\app.c:372:94: note: each undeclared identifier is reported only once for each function it appears in
+18:59:11 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+18:59:25 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\Container\\container.o" "..\\App\\Container\\container.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+19:00:48 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+19:05:53 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+c:/mingw/bin/../lib/gcc/mingw32/6.3.0/../../../../mingw32/bin/ld.exe: cannot open output file DS1-23-09-2022-DRAW-C-BASE.exe: Permission denied
+collect2.exe: error: ld returned 1 exit status
+19:05:55 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+c:/mingw/bin/../lib/gcc/mingw32/6.3.0/../../../../mingw32/bin/ld.exe: cannot open output file DS1-23-09-2022-DRAW-C-BASE.exe: Permission denied
+collect2.exe: error: ld returned 1 exit status
+19:06:04 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+19:06:29 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+20:12:01 **** Rebuild of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Utils\\utils.o" "..\\Utils\\utils.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\main.o" "..\\src\\main.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\Container\\container.o" "..\\App\\Container\\container.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+14:12:34 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+14:15:19 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\main.o" "..\\src\\main.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+14:15:25 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\main.o" "..\\src\\main.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+14:15:35 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\main.o" "..\\src\\main.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+14:15:43 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "src\\main.o" "..\\src\\main.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+14:17:08 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+14:25:01 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+14:44:08 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+..\Tools\tool.c: In function 'ToolAt':
+..\Tools\tool.c:227:23: error: assignment of member 'm_colorAt' in read-only object
+      pTool->m_colorAt = *(SDL_Color*)(pTool->m_pSurface->pixels +
+                       ^
+..\Tools\tool.c:233:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+14:44:36 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+..\Tools\tool.c: In function 'ToolAt':
+..\Tools\tool.c:227:23: error: assignment of member 'm_colorAt' in read-only object
+      pTool->m_colorAt = *(SDL_Color*){pTool->m_pSurface->pixels +
+                       ^
+..\Tools\tool.c:233:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+14:45:34 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+..\Tools\tool.c:214:8: error: conflicting types for 'ToolAt'
+ t_tool*ToolAt(t_tool*pTool, SDL_Point*pAt){
+        ^~~~~~
+In file included from ..\Tools\tool.c:20:0:
+..\Tools\tool.h:31:8: note: previous declaration of 'ToolAt' was here
+ t_tool*ToolAt(const t_tool*pTool, SDL_Point*pAt);
+        ^~~~~~
+..\Tools\tool.c: In function 'ToolAt':
+..\Tools\tool.c:232:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+14:45:46 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+..\Tools\tool.c: In function 'ToolAt':
+..\Tools\tool.c:232:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+14:46:11 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+14:47:05 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+..\App\app.c: In function 'AppRun':
+..\App\app.c:295:37: error: expected ')' before ';' token
+         (pApp->m_selectedToolColor));
+                                     ^
+..\App\app.c:337:21: error: expected ';' before '}' token
+                     }
+                     ^
+..\App\app.c:280:21: warning: enumeration value 'TOOL_UNDEFINED' not handled in switch [-Wswitch]
+                     switch (ToolGetType(pApp->m_pSelectedTool)){
+                     ^~~~~~
+..\App\app.c:280:21: warning: enumeration value 'TOOL_POLYGON' not handled in switch [-Wswitch]
+..\App\app.c:280:21: warning: enumeration value 'TOOL_COLORCHART' not handled in switch [-Wswitch]
+14:47:08 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+..\App\app.c: In function 'AppRun':
+..\App\app.c:295:36: error: expected ')' before ';' token
+         (pApp->m_selectedToolColor);
+                                    ^
+..\App\app.c:337:21: error: expected ')' before '}' token
+                     }
+                     ^
+..\App\app.c:337:21: error: expected ';' before '}' token
+..\App\app.c:280:21: warning: enumeration value 'TOOL_UNDEFINED' not handled in switch [-Wswitch]
+                     switch (ToolGetType(pApp->m_pSelectedTool)){
+                     ^~~~~~
+..\App\app.c:280:21: warning: enumeration value 'TOOL_POLYGON' not handled in switch [-Wswitch]
+..\App\app.c:280:21: warning: enumeration value 'TOOL_COLORCHART' not handled in switch [-Wswitch]
+14:47:22 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+14:52:38 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+App\app.o: In function `AppRun':
+C:\Users\Garnier\Desktop\Programmation\C\2EME ANNEE\MinDraw\DS1-23-09-2022-DRAW-C-BASE\Debug/../App/app.c:235: undefined reference to `ToolGetColor'
+collect2.exe: error: ld returned 1 exit status
+14:54:06 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+App\app.o: In function `AppRun':
+C:\Users\Garnier\Desktop\Programmation\C\2EME ANNEE\MinDraw\DS1-23-09-2022-DRAW-C-BASE\Debug/../App/app.c:235: undefined reference to `ToolGetColor'
+collect2.exe: error: ld returned 1 exit status
+14:55:56 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+14:55:58 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+14:59:03 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+14:59:27 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+12:30:04 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+18:14:17 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+..\App\app.c: In function 'AppRun':
+..\App\app.c:228:25: warning: unused variable 'pCurrentTool' [-Wunused-variable]
+                  t_tool*pCurrentTool = pApp->m_pSelectedTool;
+                         ^~~~~~~~~~~~
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+18:25:35 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+18:30:34 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+..\App\app.c: In function 'AppRun':
+..\App\app.c:371:17: error: 'else' without a previous 'if'
+                 else{ /* WE ARE NOT DRAWING AT THIS TIME !!!!!!!!!!!!!!!!!!!! */
+                 ^~~~
+18:30:48 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+18:30:59 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+18:32:01 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+..\App\app.c: In function 'AppRun':
+..\App\app.c:350:74: warning: variable 'iClip' set but not used [-Wunused-but-set-variable]
+                      int iXmouse=event.motion.x, iYmouse=event.motion.y, iClip=0;
+                                                                          ^~~~~
+..\App\app.c:350:50: warning: variable 'iYmouse' set but not used [-Wunused-but-set-variable]
+                      int iXmouse=event.motion.x, iYmouse=event.motion.y, iClip=0;
+                                                  ^~~~~~~
+..\App\app.c:350:26: warning: variable 'iXmouse' set but not used [-Wunused-but-set-variable]
+                      int iXmouse=event.motion.x, iYmouse=event.motion.y, iClip=0;
+                          ^~~~~~~
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+18:33:17 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+10:46:11 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+10:46:26 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+10:55:59 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+..\App\app.c:309:0: error: unterminated #ifndef
+ #ifndef APP_DONT_PROCESS_POLYGON_TOOL
+ 
+10:56:06 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+11:07:12 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+15:21:14 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+15:37:25 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+17:23:00 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+17:23:37 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+18:14:40 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+18:42:17 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+18:42:33 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+18:43:24 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+18:56:00 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+..\App\app.c: In function 'AppRun':
+..\App\app.c:246:25: warning: implicit declaration of function 'SDL_SetWindowMouseRect' [-Wimplicit-function-declaration]
+                         SDL_SetWindowMouseRect(pApp->m_pWindow, &pApp->m_rDrawingArea); /* clip the mouse cursor to the drawing area */
+                         ^~~~~~~~~~~~~~~~~~~~~~
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+App\app.o: In function `AppRun':
+D:\Programmation\C\2EME ANNEE\MinDraw\DS1-23-09-2022-DRAW-C-BASE\Debug/../App/app.c:246: undefined reference to `SDL_SetWindowMouseRect'
+collect2.exe: error: ld returned 1 exit status
+19:17:26 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+15:29:16 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+15:30:22 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+15:22:50 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+14:41:11 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "App\\app.o" "..\\App\\app.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Shapes\\shape.o" "..\\Shapes\\shape.c" 
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+..\Tools\tool.c: In function 'ToolAt':
+..\Tools\tool.c:228:7: warning: initialization makes pointer from integer without a cast [-Wint-conversion]
+       10};
+       ^~
+..\Tools\tool.c:228:7: note: (near initialization for '(anonymous)')
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+14:41:22 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+14:44:06 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+14:49:04 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+..\Tools\tool.c: In function 'ToolAt':
+..\Tools\tool.c:228:7: warning: initialization makes pointer from integer without a cast [-Wint-conversion]
+       1000};
+       ^~~~
+..\Tools\tool.c:228:7: note: (near initialization for '(anonymous)')
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+14:49:15 **** Incremental Build of configuration Debug for project DS1-23-09-2022-DRAW-C-BASE ****
+Info: Internal Builder is used for build
+gcc -Imingw32 -ISDL2main -ISDL2 -O0 -g3 -Wall -c -fmessage-length=0 -o "Tools\\tool.o" "..\\Tools\\tool.c" 
+g++ "-LC:\\MinGW\\lib\\SDL2" -o DS1-23-09-2022-DRAW-C-BASE "App\\Container\\container.o" "App\\app.o" "Shapes\\shape.o" "Tools\\tool.o" "Utils\\utils.o" "src\\main.o" -lSDL2 -lSDL2_image 
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
+Info: Nothing to build for DS1-23-09-2022-DRAW-C-BASE
